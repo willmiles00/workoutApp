@@ -1,7 +1,7 @@
 let trackBtn = document.querySelector('#trackBtn')
 let my_modal_1 = document.querySelector('#my_modal_1')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
-
+let workoutSelect = document.querySelector('#workoutSelect')
 
 
 
@@ -18,6 +18,14 @@ function trackNewWorkout(){
     
 }
 trackNewWorkout()
+
+workoutSelect.addEventListener('change', (event)=>{
+    console.log(event)
+    if(event.target.value == 'weights'){
+        console.log('weights selected')
+    }
+})
+
 // 2. As a user, I can add a date to each workout
 // 3. As a user, I can add measurements to each workout (distance, time,
 // weight, sets, etc.)
