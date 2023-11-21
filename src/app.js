@@ -26,6 +26,13 @@ workoutSelect.addEventListener('change', (event)=>{
     }
 })
 
+newWorkoutForm.addEventListener('submit', (event)=>{
+    event.preventDefault()
+    let formData = new FormData(newWorkoutForm)
+    console.log(formData.get('workouts'))
+    my_modal_1.close()
+})
+
 // 2. As a user, I can add a date to each workout
 // 3. As a user, I can add measurements to each workout (distance, time,
 // weight, sets, etc.)
