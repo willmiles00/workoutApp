@@ -4,7 +4,7 @@
     "tailwindcss": "^3.3.5"
   },
   "scripts": {
-    "frontend": "tailwindcss -i client/src/input.css -o dist/output.css --watch",
+    "frontend": "tailwindcss -i src/input.css -o dist/output.css --watch",
     "backend": "node server.js"
   },
   "dependencies": {
