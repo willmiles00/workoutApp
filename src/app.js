@@ -3,7 +3,15 @@ let my_modal_1 = document.querySelector('#my_modal_1')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
 
-
+//grabs today's date, makes it the default and maximum
+let dateSelector = document.querySelector('#dateSelector')
+let today = new Date();
+let yyyy = today.getFullYear();
+let mm = today.getMonth() + 1; // Months are zero-indexed
+let dd = today.getDate();
+let formattedDate = yyyy + '-' + (mm < 10 ? '0' + mm : mm) + '-' + (dd < 10 ? '0' + dd : dd);
+dateSelector.value = formattedDate
+dateSelector.max = formattedDate
 
 
 
@@ -22,7 +30,7 @@ trackNewWorkout()
 workoutSelect.addEventListener('change', (event)=>{
     console.log(event)
     if(event.target.value == 'weights'){
-        console.log('weights selected')
+    let weightsForm = `<s>`
     }
 })
 
