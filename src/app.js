@@ -3,17 +3,22 @@ let my_modal_1 = document.querySelector('#my_modal_1')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
 
+
+
+
+
+
+
+// As a user, I can add a date to each workout
 //grabs today's date, makes it the default and maximum
 let dateSelector = document.querySelector('#dateSelector')
 let today = new Date();
 let yyyy = today.getFullYear();
-let mm = today.getMonth() + 1; // Months are zero-indexed
+let mm = today.getMonth() + 1; 
 let dd = today.getDate();
 let formattedDate = yyyy + '-' + (mm < 10 ? '0' + mm : mm) + '-' + (dd < 10 ? '0' + dd : dd);
 dateSelector.value = formattedDate
 dateSelector.max = formattedDate
-
-
 
 // As a user, I can track a new workout
 function trackNewWorkout(){
@@ -27,10 +32,21 @@ function trackNewWorkout(){
 }
 trackNewWorkout()
 
+
+// As a user, I can add measurements to each workout (distance, time, weight, sets, etc.)
 workoutSelect.addEventListener('change', (event)=>{
     console.log(event)
     if(event.target.value == 'weights'){
-    let weightsForm = `<s>`
+    let weightsForm = `
+    <label for="howHeavy"><br>Weight (in pounds):</label>
+    <input class='input input-bordered w-1/2' required type="number" id="howHeavy" name="howHeavy" min="1" max="500" />
+    
+    <label for="reps"><br>Reps:</label>
+    <input class='input input-bordered w-1/2' required type="number" id="reps" name="reps" min="1" max="500" />
+    
+    <label for="sets"><br>Sets:</label>
+    <input class='input input-bordered w-1/2' required type="number" id="sets" name="sets" min="1" max="500" />`
+        workoutSelect.insertAdjacentHTML("afterend", weightsForm)
     }
 })
 
@@ -41,9 +57,8 @@ newWorkoutForm.addEventListener('submit', (event)=>{
     my_modal_1.close()
 })
 
-// 2. As a user, I can add a date to each workout
-// 3. As a user, I can add measurements to each workout (distance, time,
-// weight, sets, etc.)
+
+
 // 4. As a user, I can edit previously submitted workouts
 // 5. As a user, I can view previous workouts in a timeline
 // 6. As a user, I can delete workouts
