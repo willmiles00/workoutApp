@@ -145,11 +145,15 @@ newWorkoutForm.addEventListener('submit', (event)=>{
 });
 
 
+// 4. As a user, I can view previous workouts in a timeline
+function viewWorkouts(){
+completedWorkouts.forEach((workout)=>{
+  console.log(workout)
+})
+}
+viewWorkouts()
 
-
-
-// 4. As a user, I can edit previously submitted workouts
-// 5. As a user, I can view previous workouts in a timeline
+// 5. As a user, I can edit previously submitted workouts
 // 6. As a user, I can delete workouts
 // 7. As a user, I can earn badges for completing different exercise goals
 // 8. As a user, I can share workouts, badges, and other progress goals
