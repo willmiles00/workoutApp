@@ -6,10 +6,35 @@ let workoutSelect = document.querySelector('#workoutSelect')
 
 
 let completedWorkouts = [
-    
+    {
+      date: "2023-11-30",
+      workout: "running",
+      duration: 30,
+      distance: 30,
+    },
+    {
+      date: "2023-13-03",
+      workout: "running",
+      howHeavy: 30,
+      reps: 15,
+      sets: 3,
+    }
 ]
 
-
+const workoutTypeMapping = {
+  weights: {
+    fields: ['howHeavy', 'reps', 'sets'],
+    properties: ['howHeavy', 'reps', 'sets']
+  },
+  running: {
+    fields: ['duration', 'distance'],
+    properties: ['duration', 'distance']
+  },
+  default: {
+    fields: ['details'],
+    properties: ['details']
+  }
+};
 
 // As a user, I can add a date to each workout
 //grabs today's date, makes it the default and maximum
@@ -93,16 +118,32 @@ function generateFormElements(workoutType) {
   
 
 newWorkoutForm.addEventListener('submit', (event)=>{
-    event.preventDefault()
-    let formData = new FormData(newWorkoutForm)
+  event.preventDefault();
 
+  let formData = new FormData(newWorkoutForm);
 
-    for (const entry of formData) {
-      console.log(entry);
-    }
-    console.log(event)
-    addNewWorkoutPopout.close()
-})
+  let selectedWorkoutType = workoutSelect.value;
+  
+  //Creates a New Workout using the data gathered using submit
+  let newWorkout = {
+      date: formData.get('dateSelector'),
+      workout: selectedWorkoutType
+  };
+
+  // Get the field and property maps based on the workout type
+  const { fields, properties } = workoutTypeMapping[selectedWorkoutType] || workoutTypeMapping.default;
+
+  // Map form field values to the corresponding properties in the new workout object
+  fields.forEach((field, index) => {
+      newWorkout[properties[index]] = formData.get(field);
+  });
+
+  //pushes to the completedWorkouts array
+  completedWorkouts.push(newWorkout);
+  console.log(completedWorkouts);
+  addNewWorkoutPopout.close();
+});
+
 
 
 
