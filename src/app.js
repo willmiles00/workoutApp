@@ -1,11 +1,13 @@
 let trackBtn = document.querySelector('#trackBtn')
-let my_modal_1 = document.querySelector('#my_modal_1')
+let addNewWorkoutPopout = document.querySelector('#addNewWorkoutPopout')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
 
 
 
-
+let completedWorkouts = [
+    
+]
 
 
 
@@ -24,38 +26,84 @@ dateSelector.max = formattedDate
 function trackNewWorkout(){
     trackBtn.addEventListener('click', (event)=>{
         newWorkoutForm.reset();
-        my_modal_1.showModal();
-
-        console.log('hello')
+        addNewWorkoutPopout.showModal();
     })
     
 }
 trackNewWorkout()
 
 
-// As a user, I can add measurements to each workout (distance, time, weight, sets, etc.)
-workoutSelect.addEventListener('change', (event)=>{
-    console.log(event)
-    if(event.target.value == 'weights'){
-    let weightsForm = `
-    <label for="howHeavy"><br>Weight (in pounds):</label>
-    <input class='input input-bordered w-1/2' required type="number" id="howHeavy" name="howHeavy" min="1" max="500" />
-    
-    <label for="reps"><br>Reps:</label>
-    <input class='input input-bordered w-1/2' required type="number" id="reps" name="reps" min="1" max="500" />
-    
-    <label for="sets"><br>Sets:</label>
-    <input class='input input-bordered w-1/2' required type="number" id="sets" name="sets" min="1" max="500" />`
-        workoutSelect.insertAdjacentHTML("afterend", weightsForm)
+function generateFormElements(workoutType) {
+    if (workoutType === "weights") {
+      // Generate weights form elements
+      return `
+      <div id="dynamicForm">
+        <div id="weightsForm">
+          <label for="howHeavy"><br>Weight (in pounds):</label>
+          <input class='input input-bordered w-1/2' required type="number" id="howHeavy" name="howHeavy" min="1" max="500" />
+  
+          <label for="reps"><br>Reps:</label>
+          <input class='input input-bordered w-1/2' required type="number" id="reps" name="reps" min="1" max="500" />
+  
+          <label for="sets"><br>Sets:</label>
+          <input class='input input-bordered w-1/2' required type="number" id="sets" name="sets" min="1" max="500" />
+        </div>
+        </div>
+      `;
+    } else if (workoutType === "running") {
+      // Generate cardio form elements
+      return `
+      <div id="dynamicForm">
+        <div id="runningForm">
+          <label for="duration"><br>Duration (in minutes):</label>
+          <input class='input input-bordered w-1/2' required type="number" id="duration" name="duration" min="1" max="60" />
+  
+          <label for="distance"><br>Distance (in miles):</label>
+          <input class='input input-bordered w-1/2' required type="number" id="distance" name="distance" min="0" max="100" />
+        </div>
+        </div>
+      `;
+    } else {
+      // Default form elements for other workout types
+      return `
+      <div id="dynamicForm">
+        <div id="otherWorkoutForm">
+          <label for="details"><br>Details:</label>
+          <textarea class='input input-bordered w-full' required id="details" name="details" rows="3"></textarea>
+        </div>
+        </div>
+      `;
     }
-})
+  }
+  
+  // Handle workout selection change
+  workoutSelect.addEventListener('change', (event) => {
+    const selectedWorkoutType = event.target.value;
+    const formElementsHTML = generateFormElements(selectedWorkoutType);
+  
+    // Clear existing form elements
+    const existingFormElements = document.getElementById('dynamicForm');
+    if (existingFormElements) {
+      existingFormElements.parentNode.removeChild(existingFormElements);
+    }
+  
+    // Insert new form elements
+    workoutSelect.insertAdjacentHTML('afterend', formElementsHTML);
+  });
+  
 
 newWorkoutForm.addEventListener('submit', (event)=>{
     event.preventDefault()
     let formData = new FormData(newWorkoutForm)
-    console.log(formData.get('workouts'))
-    my_modal_1.close()
+
+
+    for (const entry of formData) {
+      console.log(entry);
+    }
+    console.log(event)
+    addNewWorkoutPopout.close()
 })
+
 
 
 
