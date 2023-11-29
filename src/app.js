@@ -2,7 +2,7 @@ let trackBtn = document.querySelector('#trackBtn')
 let addNewWorkoutPopout = document.querySelector('#addNewWorkoutPopout')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
-
+let previousWorkoutsSection = document.querySelector("#previousWorkoutsSection")
 
 
 let completedWorkouts = [
@@ -13,8 +13,8 @@ let completedWorkouts = [
       distance: 30,
     },
     {
-      date: "2023-13-03",
-      workout: "running",
+      date: "2023-12-03",
+      workout: "weights",
       howHeavy: 30,
       reps: 15,
       sets: 3,
@@ -142,16 +142,34 @@ newWorkoutForm.addEventListener('submit', (event)=>{
   completedWorkouts.push(newWorkout);
   console.log(completedWorkouts);
   addNewWorkoutPopout.close();
+  viewWorkouts(completedWorkouts)
 });
 
 
 // 4. As a user, I can view previous workouts in a timeline
-function viewWorkouts(){
+function viewWorkouts(completedWorkouts){
+  // clears out previously submitted workouts
+  previousWorkoutsSection.innerHTML = "";
+
 completedWorkouts.forEach((workout)=>{
   console.log(workout)
+
+      const p = `<p data-todoText='${workout.workout}'>
+    <b>Date:</b> ${workout.date} <b>Workout:</b> ${workout.workout} <b>Details:</b>
+</p> `;
+
+    previousWorkoutsSection.insertAdjacentHTML("beforeend", p);
+
 })
 }
-viewWorkouts()
+viewWorkouts(completedWorkouts)
+
+
+
+
+
+
+
 
 // 5. As a user, I can edit previously submitted workouts
 // 6. As a user, I can delete workouts
