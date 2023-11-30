@@ -158,7 +158,7 @@ completedWorkouts.forEach((workout)=>{
   console.log(workout)
 
       const p = `<p data-todoText='${workout.workout}'>
-    <b>Date:</b> ${workout.date} <b>Workout:</b> ${workout.workout} <b>Details:</b>
+    <b>Date:</b> <div class="workoutDate">${workout.date}<div> <b>Workout:</b> ${workout.workout} <b>Details:</b>
 </p> `;
 
     previousWorkoutsSection.insertAdjacentHTML("beforeend", p);
