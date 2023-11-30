@@ -148,6 +148,9 @@ newWorkoutForm.addEventListener('submit', (event)=>{
 
 // 4. As a user, I can view previous workouts in a timeline
 function viewWorkouts(completedWorkouts){
+// Sort the completedWorkouts array based on the date
+completedWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
   // clears out previously submitted workouts
   previousWorkoutsSection.innerHTML = "";
 
