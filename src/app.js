@@ -9,30 +9,43 @@ let completedWorkouts = [
     {
       date: "2023-11-30",
       workout: "running",
-      duration: 30,
-      distance: 30,
+      details:{duration: 30,
+        distance: 30,}
+      
     },
     {
       date: "2023-12-03",
       workout: "weights",
-      howHeavy: 30,
+      details:{howHeavy: 30,
       reps: 15,
-      sets: 3,
+      sets: 3,}
     }
 ]
 
 const workoutTypeMapping = {
   weights: {
     fields: ['howHeavy', 'reps', 'sets'],
-    properties: ['howHeavy', 'reps', 'sets']
+    properties: ['howHeavy', 'reps', 'sets'],
+    displayNames: {
+      howHeavy: 'Weight (in pounds)',
+      reps: 'Reps',
+      sets: 'Sets'
+    }
   },
   running: {
     fields: ['duration', 'distance'],
-    properties: ['duration', 'distance']
+    properties: ['duration', 'distance'],
+    displayNames: {
+      duration: 'Duration (in minutes)',
+      distance: 'Distance (in miles)'
+    }
   },
   default: {
     fields: ['details'],
-    properties: ['details']
+    properties: ['details'],
+    displayNames: {
+      details: 'Details'
+    }
   }
 };
 
@@ -130,17 +143,11 @@ function submitWorkout(){
   //Creates a New Workout using the data gathered using submit
   let newWorkout = {
       date: formData.get('dateSelector'),
-      workout: selectedWorkoutType
+      workout: selectedWorkoutType,
+      details:{}
   };
 
-  // Get the field and property maps based on the workout type
-  const { fields, properties } = workoutTypeMapping[selectedWorkoutType] || workoutTypeMapping.default;
-
-  // Map form field values to the corresponding properties in the new workout object
-  fields.forEach((field, index) => {
-      newWorkout[properties[index]] = formData.get(field);
-  });
-
+ 
   //pushes to the completedWorkouts array
   completedWorkouts.push(newWorkout);
   console.log(completedWorkouts);
@@ -161,6 +168,21 @@ completedWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
 completedWorkouts.forEach((workout)=>{
   console.log(workout)
 
+  let detailsHTML = '';
+
+  const workoutType = workoutTypeMapping[workout.workout];
+
+  if (workoutType) {
+    detailsHTML = workoutType.fields
+    .map((field, index) => {
+      const value = workout.details[field];
+      const propertyName = workoutType.displayNames[field] || field; // Use display name if available, otherwise use the field name
+      return `<div>${propertyName}: ${value}</div>`;
+    })
+    .join('');
+  } else {
+    detailsHTML = `<div>Details: ${JSON.stringify(workout.details)}</div>`;
+  }
   
 // builds a new item on the Workout Timeline
 const li= `<li>
@@ -170,7 +192,7 @@ const li= `<li>
 <div class="timeline-start md:text-end mb-10">
   <time class="font-mono italic">${workout.date}</time>
   <div class="text-lg font-black">Workout: ${workout.workout}</div>
-  details: fdasnklnfldas
+  details: ${detailsHTML}
 </div>
 <hr/>
 </li>` 
