@@ -18,7 +18,7 @@ let completedWorkouts = [
       workout: "weights",
       details:{howHeavy: 30,
       reps: 15,
-      sets: 3,}
+      sets: 3,},
     }
 ]
 
@@ -147,6 +147,19 @@ function submitWorkout(){
       details:{}
   };
 
+  //grabs the mapping details defined at the top of the JS document
+  const workoutType = workoutTypeMapping[selectedWorkoutType];
+
+
+  //if else statement checks if workout is a defined workout, or a generic one
+  if (workoutType && workoutType.fields.length > 0) {
+    workoutType.properties.forEach(property => {
+      newWorkout.details[property] = formData.get(property);
+    });
+  } else {
+    // For "other" workout types, assuming it's a single details field
+    newWorkout.details = formData.get('details');
+  }
  
   //pushes to the completedWorkouts array
   completedWorkouts.push(newWorkout);
@@ -187,11 +200,11 @@ completedWorkouts.forEach((workout)=>{
 // builds a new item on the Workout Timeline
 const li= `<li>
 <div class="timeline-middle">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg>
+<i class="fa-solid fa-circle" style="color: #ffffff;"></i>
 </div>
 <div class="timeline-start md:text-end mb-10">
   <time class="font-mono italic">${workout.date}</time>
-  <div class="text-lg font-black">Workout: ${workout.workout}</div>
+  <div class="text-lg font-black">Workout: ${workout.workout} </div>
   details: ${detailsHTML}
 </div>
 <hr/>
