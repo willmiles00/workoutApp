@@ -3,6 +3,8 @@ let addNewWorkoutPopout = document.querySelector('#addNewWorkoutPopout')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
 let workoutTimeline = document.querySelector('#workoutTimeline')
+let editWorkoutPopout = document.querySelector('#editWorkoutPopout')
+let deleteWorkoutPopout = document.querySelector('#deleteWorkoutPopout')
 
 
 let completedWorkouts = [
@@ -19,7 +21,42 @@ let completedWorkouts = [
       details:{howHeavy: 30,
       reps: 15,
       sets: 3,},
-    }
+    },
+    {
+      date: "2023-12-03",
+      workout: "weights",
+      details:{howHeavy: 30,
+      reps: 15,
+      sets: 3,},
+    },
+    {
+      date: "2023-12-03",
+      workout: "weights",
+      details:{howHeavy: 30,
+      reps: 15,
+      sets: 3,},
+    },
+    {
+      date: "2023-12-03",
+      workout: "weights",
+      details:{howHeavy: 30,
+      reps: 15,
+      sets: 3,},
+    },
+    {
+      date: "2023-12-03",
+      workout: "weights",
+      details:{howHeavy: 30,
+      reps: 15,
+      sets: 3,},
+    },
+    {
+      date: "2023-12-03",
+      workout: "weights",
+      details:{howHeavy: 30,
+      reps: 15,
+      sets: 3,},
+    },
 ]
 
 const workoutTypeMapping = {
@@ -179,8 +216,8 @@ completedWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
   workoutTimeline.innerHTML = "";
 
 completedWorkouts.forEach((workout)=>{
-  console.log(workout)
 
+  //Quite literally what creates the HTML element for the details array
   let detailsHTML = '';
 
   const workoutType = workoutTypeMapping[workout.workout];
@@ -202,40 +239,69 @@ const li= `<li>
 <div class="timeline-middle">
 <i class="fa-solid fa-circle" style="color: #ffffff;"></i>
 </div>
-<div class="timeline-start md:text-end mb-10">
+<div class="bg-gray-400 bg-opacity-25 p-9 rounded-xl  w-60 timeline-start md:text-end mb-10">
   <time class="font-mono italic">${workout.date}</time>
-  <div class="text-lg font-black">Workout: ${workout.workout} </div>
+  <div class="text-lg  font-black">Workout: ${workout.workout} </div>
   details: ${detailsHTML}
+  <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${completedWorkouts.indexOf(workout)}">Edit</button>
+  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${completedWorkouts.indexOf(workout)}">Delete</button>
 </div>
 <hr/>
-</li>` 
+</li>
+` 
 
     workoutTimeline.insertAdjacentHTML("beforeend", li);
-
+  
 })
 }
 viewWorkouts(completedWorkouts)
 
-
-
-
-
-
-
-
 // 5. As a user, I can edit previously submitted workouts
+function editWorkout(){
+  document.addEventListener('click', (event)=>{
+    if (event.target.classList.contains('editBtn')) {
+      editWorkoutPopout.showModal()
+    }
+  })
+}
+editWorkout()
+viewWorkouts(completedWorkouts)
+
 // 6. As a user, I can delete workouts
+function deleteWorkout(){
+  document.addEventListener('click', (event)=>{
+    if (event.target.classList.contains('deleteBtn')) {
+      deleteWorkoutPopout.showModal()
+    }
+  })
+}
+deleteWorkout()
+
 // 7. As a user, I can earn badges for completing different exercise goals
+
 // 8. As a user, I can share workouts, badges, and other progress goals
 // across various social medias
+
 // 9. As a user, I can set long term workout goals with (e.g. a ‘goal’ would
 // be ‘lift weights 20 times’ and progress could be seen on the app ‘3
 // out of 20 times completed’)
+
+
 // 10.As a user, I can generate a workout plan for the day and track my
 // progress as I go along.
+
+
 // 11.As a user, I can log my weight and track progression over time
+
+
 // 12.As a user, I can log journal entries, and track my mood with each
 // entry
+
+
 // 13.As a user, I can track my water intake.
+
+
 // 14.As a user, I can view a library of different workouts
+
+
 // 15.As a user, I can add progress pictures to my timeline 

@@ -8,9 +8,11 @@
     <link rel="stylesheet" href="https://use.typekit.net/kto8rkn.css">
     <title>Fit Buddy</title>
 </head>
-<body class="m-6">
+<body class=" m-6">
+  <header class="bg-slate-600 rounded-xl mb-6 p-9 ">
     <h1 class="text-6xl font-articulat">Fit Buddy</h1>
     <p class="text-xl">Let's get moving!</p>
+  </header>
  
   
 
@@ -18,7 +20,7 @@
      <!-- JS here -->
     </ul>
 
-    <button id="trackBtn" class="btn btn-secondary text-white  text-2xl font-articulat absolute bottom-10 right-10 !rounded-2xl">Track A Workout</button>
+    <button id="trackBtn" class="btn btn-secondary text-white  text-2xl font-articulat fixed bottom-10 right-10 !rounded-2xl">Track A Workout</button>
 
     <!-- New Workout Popup -->
     <dialog id="addNewWorkoutPopout" class="modal">
@@ -43,8 +45,50 @@
         </div>
       </dialog>
 <!-- End of New Workout Popup -->
+
+ <!-- Edit Workout Popup -->
+ <dialog id="editWorkoutPopout" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Edit a Workout</h3>
+    <p class="py-4">Please make edits as needed</p>
+    <div class="modal-action">
+      <form id="editWorkoutForm" class="text-center justify-center items-center w-full" method="dialog">
+        <label for="start">Select workout date:</label>
+
+<input required type="date" id="dateSelector" name="dateSelector" value="" min="2018-01-01" max=""/>
+        <select required name="workouts" id="workoutSelect" class="select select-bordered">
+          <option value="">--Please choose an option--</option>
+          <option value="weights">Weights</option>
+          <option value="running">Running</option>
+          <option value="pushups">Pushups</option>
+        </select>
+       
+        <button type="submit" class="btn btn-primary w-3/4">Submit</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+<!-- End of Edit Workout Popup -->
+
+ <!-- Edit Workout Popup -->
+ <dialog id="deleteWorkoutPopout" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Edit a Workout</h3>
+    <p class="py-4">Please make edits as needed</p>
+    <div class="modal-action">
+      <form id="deleteWorkoutForm" class="text-center justify-center items-center w-full" method="dialog">
+        <label for="start">Are you sure you would like to delete this workout?</label>
+
+       
+        <button type="submit" class="btn btn-primary w-3/4">Yes</button>
+        <button type="submit" class="btn btn-primary w-3/4">No</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+<!-- End of Edit Workout Popup -->
       
-   
+   <footer class="bg-slate-600 m-8">Will Miles yo</footer>
 <script src="./app.js"></script>
 </body>
 </html>
