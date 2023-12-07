@@ -1,3 +1,4 @@
+//DOM Elements
 let trackBtn = document.querySelector('#trackBtn')
 let addNewWorkoutPopout = document.querySelector('#addNewWorkoutPopout')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
@@ -85,6 +86,8 @@ const workoutTypeMapping = {
     }
   }
 };
+
+
 
 // As a user, I can add a date to each workout
 //grabs today's date, makes it the default and maximum
@@ -244,7 +247,7 @@ const li= `<li>
   <div class="text-lg  font-black">Workout: ${workout.workout} </div>
   details: ${detailsHTML}
   <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${completedWorkouts.indexOf(workout)}">Edit</button>
-  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${completedWorkouts.indexOf(workout)}">Delete</button>
+  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${completedWorkouts.workout}">Delete</button>
 </div>
 <hr/>
 </li>
@@ -260,7 +263,8 @@ viewWorkouts(completedWorkouts)
 function editWorkout(){
   document.addEventListener('click', (event)=>{
     if (event.target.classList.contains('editBtn')) {
-      editWorkoutPopout.showModal()
+      editWorkoutPopout.showModal() 
+    
     }
   })
 }
@@ -270,9 +274,7 @@ viewWorkouts(completedWorkouts)
 // 6. As a user, I can delete workouts
 function deleteWorkout(){
   document.addEventListener('click', (event)=>{
-    if (event.target.classList.contains('deleteBtn')) {
-      deleteWorkoutPopout.showModal()
-    }
+    console.log(event.target)
   })
 }
 deleteWorkout()
