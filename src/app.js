@@ -160,7 +160,6 @@ function submitWorkout(){
  
   //pushes to the completedWorkouts array
   completedWorkouts.push(newWorkout);
-  console.log(completedWorkouts);
   addNewWorkoutPopout.close();
   viewWorkouts(completedWorkouts)
 }
@@ -221,16 +220,31 @@ function viewWorkouts(completedWorkouts){
 viewWorkouts(completedWorkouts)
 
 // 5. As a user, I can edit previously submitted workouts
-function editWorkout(){
-  document.addEventListener('click', (event)=>{
-    if (event.target.classList.contains('editBtn')) {
-      editWorkoutPopout.showModal() 
-    
-    }
-  })
+
+//mutable variable to store the id of the workout to be edited
+let editBtnId;
+
+document.addEventListener('click', (event)=>{
+  if (event.target.classList.contains('editBtn')) {
+    editBtnId = event.target.dataset.editbtn;
+    editWorkoutPopout.showModal() 
+    editWorkout(editBtnId);
+  }
+})
+
+editWorkoutPopout.addEventListener('submit', (event)=>{
+  event.preventDefault()
+  editWorkout(editBtnId)
+  editWorkoutPopout.close()
 }
-editWorkout()
-viewWorkouts(completedWorkouts)
+)
+
+
+function editWorkout(editBtnId){
+  const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId));
+  console.log('Workout name:', workoutToEdit.workout + workoutToEdit.date + workoutToEdit.details);
+}
+
 
 // As a user, I can delete workouts
 
