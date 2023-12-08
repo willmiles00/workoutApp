@@ -10,55 +10,30 @@ let deleteWorkoutPopout = document.querySelector('#deleteWorkoutPopout')
 
 let completedWorkouts = [
     {
+      id: 1,
       date: "2023-11-30",
       workout: "running",
-      details:{duration: 30,
-        distance: 30,}
-      
+      details: {
+        duration: 30,
+        distance: 30,
+      }
     },
     {
+      id: 2,
       date: "2023-12-03",
       workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
+      details: {
+        howHeavy: 30,
+        reps: 15,
+        sets: 3,
+      },
     },
-    {
-      date: "2023-12-03",
-      workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
-    },
-    {
-      date: "2023-12-03",
-      workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
-    },
-    {
-      date: "2023-12-03",
-      workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
-    },
-    {
-      date: "2023-12-03",
-      workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
-    },
-    {
-      date: "2023-12-03",
-      workout: "weights",
-      details:{howHeavy: 30,
-      reps: 15,
-      sets: 3,},
-    },
-]
+    // ... other completed workouts
+];
+
+completedWorkouts = completedWorkouts.map((workout, index) => {
+  return { ...workout, id: index + 1 };
+});
 
 const workoutTypeMapping = {
   weights: {
@@ -182,6 +157,7 @@ function submitWorkout(){
   
   //Creates a New Workout using the data gathered using submit
   let newWorkout = {
+      id: completedWorkouts.length + 1,
       date: formData.get('dateSelector'),
       workout: selectedWorkoutType,
       details:{}
@@ -245,9 +221,9 @@ const li= `<li>
 <div class="bg-gray-400 bg-opacity-25 p-9 rounded-xl  w-60 timeline-start md:text-end mb-10">
   <time class="font-mono italic">${workout.date}</time>
   <div class="text-lg  font-black">Workout: ${workout.workout} </div>
-  details: ${detailsHTML}
-  <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${completedWorkouts.indexOf(workout)}">Edit</button>
-  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${completedWorkouts.workout}">Delete</button>
+  ${detailsHTML}
+  <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${workout.id}">Edit</button>
+  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${workout.id}">Delete</button>
 </div>
 <hr/>
 </li>
@@ -271,13 +247,23 @@ function editWorkout(){
 editWorkout()
 viewWorkouts(completedWorkouts)
 
+document.addEventListener('click', (event)=>{
+  if (event.target.classList.contains('deleteBtn')) {
+    deleteWorkoutPopout.showModal() 
+  }
+})
+
+deleteWorkoutPopout.addEventListener('submit', (event)=>{
+  deleteWorkout(event)
+})
+
 // 6. As a user, I can delete workouts
-function deleteWorkout(){
-  document.addEventListener('click', (event)=>{
-    console.log(event.target)
-  })
-}
-deleteWorkout()
+function deleteWorkout(event){
+  console.log(event.target)
+  }
+
+
+
 
 // 7. As a user, I can earn badges for completing different exercise goals
 
