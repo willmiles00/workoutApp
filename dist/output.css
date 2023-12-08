@@ -1832,6 +1832,10 @@ html {
   margin-bottom: 1.5rem;
 }
 
+.h-screen {
+  height: 100vh;
+}
+
 .w-1\/2 {
   width: 50%;
 }

@@ -9,26 +9,7 @@ let deleteWorkoutPopout = document.querySelector('#deleteWorkoutPopout')
 
 
 let completedWorkouts = [
-    {
-      id: 1,
-      date: "2023-11-30",
-      workout: "running",
-      details: {
-        duration: 30,
-        distance: 30,
-      }
-    },
-    {
-      id: 2,
-      date: "2023-12-03",
-      workout: "weights",
-      details: {
-        howHeavy: 30,
-        reps: 15,
-        sets: 3,
-      },
-    },
-    // ... other completed workouts
+   
 ];
 
 completedWorkouts = completedWorkouts.map((workout, index) => {
@@ -186,17 +167,13 @@ function submitWorkout(){
 
 
 // 4. As a user, I can view previous workouts in a timeline
-function viewWorkouts(completedWorkouts){
+function timelineWhenNoWorkouts(){
+  if (completedWorkouts.length === 0){
+    workoutTimeline.innerHTML = `<div class="text-2xl h-screen text-center">Click "Track A Workout" to get started! </div>`
+  }
+}
 
-// Sort the completedWorkouts array based on the date
-completedWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  // clears out previously submitted workouts
-  workoutTimeline.innerHTML = "";
-
-completedWorkouts.forEach((workout)=>{
-
-  //Quite literally what creates the HTML element for the details array
+function createWorkoutElement(workout) {
   let detailsHTML = '';
 
   const workoutType = workoutTypeMapping[workout.workout];
@@ -205,33 +182,41 @@ completedWorkouts.forEach((workout)=>{
     detailsHTML = workoutType.fields
     .map((field, index) => {
       const value = workout.details[field];
-      const propertyName = workoutType.displayNames[field] || field; // Use display name if available, otherwise use the field name
+      const propertyName = workoutType.displayNames[field] || field;
       return `<div>${propertyName}: ${value}</div>`;
     })
     .join('');
   } else {
     detailsHTML = `<div>Details: ${JSON.stringify(workout.details)}</div>`;
   }
-  
-// builds a new item on the Workout Timeline
-const li= `<li>
-<div class="timeline-middle">
-<i class="fa-solid fa-circle" style="color: #ffffff;"></i>
-</div>
-<div class="bg-gray-400 bg-opacity-25 p-9 rounded-xl  w-60 timeline-start md:text-end mb-10">
-  <time class="font-mono italic">${workout.date}</time>
-  <div class="text-lg  font-black">Workout: ${workout.workout} </div>
-  ${detailsHTML}
-  <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${workout.id}">Edit</button>
-  <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${workout.id}">Delete</button>
-</div>
-<hr/>
-</li>
-` 
 
-    workoutTimeline.insertAdjacentHTML("beforeend", li);
+  return `<li>
+    <div class="timeline-middle">
+      <i class="fa-solid fa-circle" style="color: #ffffff;"></i>
+    </div>
+    <div class="bg-gray-400 bg-opacity-25 p-9 rounded-xl  w-60 timeline-start md:text-end mb-10">
+      <time class="font-mono italic">${workout.date}</time>
+      <div class="text-lg  font-black">Workout: ${workout.workout} </div>
+      ${detailsHTML}
+      <button class="btn border-none bg-blue-500 editBtn" data-editBtn="${workout.id}">Edit</button>
+      <button class="btn border-none  bg-red-700 deleteBtn" data-deleteBtn="${workout.id}">Delete</button>
+    </div>
+    <hr/>
+  </li>`;
+}
+
+function viewWorkouts(completedWorkouts){
+  if (completedWorkouts.length > 0){
+    
   
-})
+  completedWorkouts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  workoutTimeline.innerHTML = "";
+  completedWorkouts.forEach((workout) => {
+    workoutTimeline.insertAdjacentHTML("beforeend", createWorkoutElement(workout));
+  });}
+  else{
+    timelineWhenNoWorkouts()
+  }
 }
 viewWorkouts(completedWorkouts)
 
@@ -247,19 +232,29 @@ function editWorkout(){
 editWorkout()
 viewWorkouts(completedWorkouts)
 
+// As a user, I can delete workouts
+
+//mutable variable to store the id of the workout to be edited
+let deleteBtnId;
+
 document.addEventListener('click', (event)=>{
   if (event.target.classList.contains('deleteBtn')) {
+    deleteBtnId = event.target.dataset.deletebtn
     deleteWorkoutPopout.showModal() 
   }
 })
 
 deleteWorkoutPopout.addEventListener('submit', (event)=>{
-  deleteWorkout(event)
+  event.preventDefault()
+  deleteWorkout(deleteBtnId)
 })
 
-// 6. As a user, I can delete workouts
-function deleteWorkout(event){
-  console.log(event.target)
+
+function deleteWorkout(deleteBtnId){
+  completedWorkouts = completedWorkouts.filter(workout => workout.id !== parseInt(deleteBtnId));
+  console.log(completedWorkouts);
+  deleteWorkoutPopout.close();
+  viewWorkouts(completedWorkouts);
   }
 
 
