@@ -2,6 +2,7 @@
 let trackBtn = document.querySelector('#trackBtn')
 let addNewWorkoutPopout = document.querySelector('#addNewWorkoutPopout')
 let newWorkoutForm = document.querySelector('#newWorkoutForm')
+let editWorkoutForm = document.querySelector('#editWorkoutForm')
 let workoutSelect = document.querySelector('#workoutSelect')
 let workoutTimeline = document.querySelector('#workoutTimeline')
 let editWorkoutPopout = document.querySelector('#editWorkoutPopout')
@@ -239,11 +240,26 @@ document.addEventListener('click', (event)=>{
     // creates a new workout selector with the current workout of the workout to be edited
     editWorkoutSelector.innerHTML = ``
     let workout = `<select class="select select-bordered w-full" id="workoutSelect" name="workoutSelect">
+    <option value="">--Please choose an option--</option>
     <option value="weights">Weights</option>
     <option value="running">Running</option>
-    <option value="other">Other</option>
+    <option value="other">Pushups</option>
     </select>`
     editWorkoutSelector.insertAdjacentHTML('afterbegin', workout)
+    editWorkoutSelector.addEventListener('change', (event) => {
+      const selectedWorkoutType = event.target.value;
+      const formElementsHTML = generateFormElements(selectedWorkoutType);
+    
+      // Clear existing form elements
+      const existingFormElements = document.getElementById('dynamicForm');
+      if (existingFormElements) {
+        existingFormElements.parentNode.removeChild(existingFormElements);
+      }
+    
+      // Insert new form elements
+      editWorkoutSelector.insertAdjacentHTML('afterend', formElementsHTML);
+    }
+    );
 
 
     // creates a new workout selector with the current workout of the workout to be edited
@@ -262,14 +278,42 @@ editWorkoutPopout.addEventListener('submit', (event)=>{
 
 
 function editWorkout(editBtnId){
-  const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId));
-  // workoutToEdit.date = editWorkoutPopout.querySelector('#dateSelector').value;
-  // workoutToEdit.workout = editWorkoutPopout.querySelector('#workoutSelect').value;
-  // const workoutType = workoutTypeMapping[workoutToEdit.workout];
-  let workoutToEditDetails = workoutToEdit.details;
-  let detailsString = JSON.stringify(workoutToEditDetails);
-  console.log('Details:', detailsString);
+  let formData = new FormData(editWorkoutForm);
+  let selectedWorkoutType = editWorkoutSelector.querySelector('#workoutSelect').value;
+
+  // Creates a New Workout using the data gathered from the form
+  let newWorkout = {
+      id: parseInt(editBtnId),
+      date: formData.get('dateSelector'),
+      workout: selectedWorkoutType,
+      details:{}
+  };
+
+  // Grabs the mapping details defined at the top of the JS document
+  const workoutType = workoutTypeMapping[selectedWorkoutType];
+
+  // If else statement checks if workout is a defined workout, or a generic one
+  if (workoutType && workoutType.fields.length > 0) {
+    workoutType.properties.forEach(property => {
+      newWorkout.details[property] = formData.get(property);
+    });
+  } else {
+    // For "other" workout types, assuming it's a single details field
+    newWorkout.details = formData.get('details');
+  }
+
+  // Map over the completedWorkouts array and replace the workout with the matching ID
+  completedWorkouts = completedWorkouts.map(workout => {
+    if (workout.id === newWorkout.id) {
+      return newWorkout;
+    } else {
+      return workout;
+    }
+  });
+
+  viewWorkouts(completedWorkouts);
 }
+
 
 
 // As a user, I can delete workouts
