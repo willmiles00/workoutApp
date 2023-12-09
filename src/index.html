@@ -55,13 +55,14 @@
       <form id="editWorkoutForm" class="text-center justify-center items-center w-full" method="dialog">
         <label for="start">Select workout date:</label>
 
-<input required type="date" id="dateSelector" name="dateSelector" value="" min="2018-01-01" max=""/>
-        <select required name="workouts" id="workoutSelect" class="select select-bordered">
+        <div id="editDateSelector"></div>
+        <div id="editWorkoutSelector"></div>
+        <!-- <select required name="workouts" id="workoutSelect" class="select select-bordered">
           <option value="">--Please choose an option--</option>
           <option value="weights">Weights</option>
           <option value="running">Running</option>
           <option value="pushups">Pushups</option>
-        </select>
+        </select> -->
        
         <button type="submit" class="btn btn-primary w-3/4">Submit</button>
       </form>

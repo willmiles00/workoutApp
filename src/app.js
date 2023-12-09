@@ -6,6 +6,8 @@ let workoutSelect = document.querySelector('#workoutSelect')
 let workoutTimeline = document.querySelector('#workoutTimeline')
 let editWorkoutPopout = document.querySelector('#editWorkoutPopout')
 let deleteWorkoutPopout = document.querySelector('#deleteWorkoutPopout')
+let editDateSelector = document.querySelector('#editDateSelector')
+let editWorkoutSelector = document.querySelector('#editWorkoutSelector')
 
 
 let completedWorkouts = [
@@ -227,14 +229,33 @@ let editBtnId;
 document.addEventListener('click', (event)=>{
   if (event.target.classList.contains('editBtn')) {
     editBtnId = event.target.dataset.editbtn;
+    const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId))
+
+    // creates a new date selector with the current date of the workout to be edited
+    editDateSelector.innerHTML = ``
+    let date = `<input required type="date" id="dateSelector" name="dateSelector" value="${workoutToEdit.date}" min="2018-01-01" max=""/>`
+    editDateSelector.insertAdjacentHTML('afterbegin', date)
+
+    // creates a new workout selector with the current workout of the workout to be edited
+    editWorkoutSelector.innerHTML = ``
+    let workout = `<select class="select select-bordered w-full" id="workoutSelect" name="workoutSelect">
+    <option value="weights">Weights</option>
+    <option value="running">Running</option>
+    <option value="other">Other</option>
+    </select>`
+    editWorkoutSelector.insertAdjacentHTML('afterbegin', workout)
+
+
+    // creates a new workout selector with the current workout of the workout to be edited
     editWorkoutPopout.showModal() 
-    editWorkout(editBtnId);
+    ;
   }
 })
 
 editWorkoutPopout.addEventListener('submit', (event)=>{
   event.preventDefault()
   editWorkout(editBtnId)
+
   editWorkoutPopout.close()
 }
 )
@@ -242,7 +263,12 @@ editWorkoutPopout.addEventListener('submit', (event)=>{
 
 function editWorkout(editBtnId){
   const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId));
-  console.log('Workout name:', workoutToEdit.workout + workoutToEdit.date + workoutToEdit.details);
+  // workoutToEdit.date = editWorkoutPopout.querySelector('#dateSelector').value;
+  // workoutToEdit.workout = editWorkoutPopout.querySelector('#workoutSelect').value;
+  // const workoutType = workoutTypeMapping[workoutToEdit.workout];
+  let workoutToEditDetails = workoutToEdit.details;
+  let detailsString = JSON.stringify(workoutToEditDetails);
+  console.log('Details:', detailsString);
 }
 
 
@@ -266,7 +292,6 @@ deleteWorkoutPopout.addEventListener('submit', (event)=>{
 
 function deleteWorkout(deleteBtnId){
   completedWorkouts = completedWorkouts.filter(workout => workout.id !== parseInt(deleteBtnId));
-  console.log(completedWorkouts);
   deleteWorkoutPopout.close();
   viewWorkouts(completedWorkouts);
   }
