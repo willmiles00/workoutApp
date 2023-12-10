@@ -18,31 +18,41 @@ app.use(express.static('dist'))
 let completedWorkouts = [
   {
     id: 1,
-    date: 'today',
+    date: '2023-09-01',
     workout: 'pushups',
     details:'freud'
 },
 {
   id: 2,
-  date: 'today',
+  date: '2019-05-05',
   workout: 'pushups',
-  details:'freud'
+  details:'dfewq'
 },
 {
   id: 3,
-  date: 'today',
+  date: '2021-07-18',
   workout: 'pushups',
-  details:'freud'
+  details:'qfwed'
 },
 ]
 
+// gets all workouts from completedWorkouts array in server.js
 app.get('/api/workouts', (req, res) => {
   res.send(completedWorkouts)
 });
 
-app.post('/api/workouts', (req, res) => {
+
+app.post('/api/workout', (req, res) => {
   // add a new workout
-});
+  completedWorkouts.push({
+    id: completedWorkouts.length + 1,
+    date: req.body.date,
+    workout: req.body.workout,
+    details: req.body.details
+  });
+  res.send(completedWorkouts)
+  })
+
 
 
 

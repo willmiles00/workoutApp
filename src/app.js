@@ -12,19 +12,18 @@ let editWorkoutSelector = document.querySelector('#editWorkoutSelector')
 
 
 
-let completedWorkouts = [
+// let completedWorkouts = [
    
-];
+// ];
 
+//server call to get completed workouts
 fetch('/api/workouts')
 .then(res => res.json())
 .then(data => {
 viewWorkouts(data)
 });
 
-completedWorkouts = completedWorkouts.map((workout, index) => {
-  return { ...workout, id: index + 1 };
-});
+
 
 const workoutTypeMapping = {
   weights: {
@@ -153,6 +152,7 @@ function submitWorkout(){
       workout: selectedWorkoutType,
       details:{}
   };
+
 
   //grabs the mapping details defined at the top of the JS document
   const workoutType = workoutTypeMapping[selectedWorkoutType];
