@@ -11,9 +11,16 @@ let editDateSelector = document.querySelector('#editDateSelector')
 let editWorkoutSelector = document.querySelector('#editWorkoutSelector')
 
 
+
 let completedWorkouts = [
    
 ];
+
+fetch('/api/workouts')
+.then(res => res.json())
+.then(data => {
+viewWorkouts(data)
+});
 
 completedWorkouts = completedWorkouts.map((workout, index) => {
   return { ...workout, id: index + 1 };
@@ -278,40 +285,8 @@ editWorkoutPopout.addEventListener('submit', (event)=>{
 
 
 function editWorkout(editBtnId){
-  let formData = new FormData(editWorkoutForm);
-  let selectedWorkoutType = editWorkoutSelector.querySelector('#workoutSelect').value;
+  const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId));
 
-  // Creates a New Workout using the data gathered from the form
-  let newWorkout = {
-      id: parseInt(editBtnId),
-      date: formData.get('dateSelector'),
-      workout: selectedWorkoutType,
-      details:{}
-  };
-
-  // Grabs the mapping details defined at the top of the JS document
-  const workoutType = workoutTypeMapping[selectedWorkoutType];
-
-  // If else statement checks if workout is a defined workout, or a generic one
-  if (workoutType && workoutType.fields.length > 0) {
-    workoutType.properties.forEach(property => {
-      newWorkout.details[property] = formData.get(property);
-    });
-  } else {
-    // For "other" workout types, assuming it's a single details field
-    newWorkout.details = formData.get('details');
-  }
-
-  // Map over the completedWorkouts array and replace the workout with the matching ID
-  completedWorkouts = completedWorkouts.map(workout => {
-    if (workout.id === newWorkout.id) {
-      return newWorkout;
-    } else {
-      return workout;
-    }
-  });
-
-  viewWorkouts(completedWorkouts);
 }
 
 
