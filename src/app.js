@@ -179,20 +179,16 @@ function submitWorkout(){
     console.log(data);
     addNewWorkoutPopout.close();
     viewWorkouts(data); // Call viewWorkouts here
-  })
-  .catch(error => {
-    // Handle the error
-    console.error('Error:', error);
   });
 }
 
 
 // 4. As a user, I can view previous workouts in a timeline
-function timelineWhenNoWorkouts(){
-  if (completedWorkouts.length === 0){
-    workoutTimeline.innerHTML = `<div class="text-2xl h-screen text-center">Click "Track A Workout" to get started! </div>`
-  }
-}
+// function timelineWhenNoWorkouts(){
+//   if (completedWorkouts.length === 0){
+//     workoutTimeline.innerHTML = `<div class="text-2xl h-screen text-center">Click "Track A Workout" to get started! </div>`
+//   }
+// }
 
 function createWorkoutElement(workout) {
   let detailsHTML = '';
@@ -236,7 +232,7 @@ function viewWorkouts(completedWorkouts){
     workoutTimeline.insertAdjacentHTML("beforeend", createWorkoutElement(workout));
   });}
   else{
-    timelineWhenNoWorkouts()
+    // timelineWhenNoWorkouts()
   }
 }
 // viewWorkouts(completedWorkouts)
@@ -267,7 +263,7 @@ document.addEventListener('click', (event)=>{
     <option value="">--Please choose an option--</option>
     <option value="weights">Weights</option>
     <option value="running">Running</option>
-    <option value="other">Pushups</option>
+    <option value="pushups">Pushups</option>
     </select>`
     editWorkoutSelector.insertAdjacentHTML('afterbegin', workout)
     editWorkoutSelector.addEventListener('change', (event) => {
@@ -302,8 +298,48 @@ editWorkoutPopout.addEventListener('submit', (event)=>{
 
 
 function editWorkout(editBtnId){
-  console.log(editBtnId)
+  let formData = new FormData(editWorkoutForm);
+  let selectedWorkoutType = formData.get('workoutSelect');
+  
+  // Create a new workout object
+  let updatedWorkout = {
+    date: formData.get('dateSelector'),
+    workout: selectedWorkoutType,
+    details: {}
+  };
+console.log(updatedWorkout)
+  // Grab the mapping details defined at the top of the JS document
+  const workoutType = workoutTypeMapping[selectedWorkoutType];
 
+  // If else statement checks if workout is a defined workout, or a generic one
+  if (workoutType && workoutType.fields.length > 0) {
+    workoutType.properties.forEach(property => {
+      updatedWorkout.details[property] = formData.get(property);
+    });
+  } else {
+    // For "other" workout types, assuming it's a single details field
+    updatedWorkout.details = formData.get('details');
+  }
+
+  // Send the updated workout to the server
+  fetch(`/api/workouts/${editBtnId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedWorkout)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response from the server
+    console.log(data);
+    // Fetch all workouts again after editing
+    fetch('/api/workouts')
+    .then(res => res.json())
+    .then(data => {
+      viewWorkouts(data); // Call viewWorkouts here
+    });
+  });
 }
 
 
@@ -323,19 +359,38 @@ document.addEventListener('click', (event)=>{
 deleteWorkoutPopout.addEventListener('submit', (event)=>{
   event.preventDefault()
   deleteWorkout(deleteBtnId)
+  deleteWorkoutPopout.close();
 })
 
 
 function deleteWorkout(deleteBtnId){
-  completedWorkouts = completedWorkouts.filter(workout => workout.id !== parseInt(deleteBtnId));
-  deleteWorkoutPopout.close();
-  viewWorkouts(completedWorkouts);
+  // Send the updated workout to the server
+  fetch(`/api/workouts/${deleteBtnId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(data => {
+    // Handle the response from the server
+    console.log(data);
+    // Fetch all workouts again after editing
+    fetch('/api/workouts')
+    .then(res => res.json())
+    .then(data => {
+      viewWorkouts(data); // Call viewWorkouts here
+    });
+  });
+
+  
   }
 
 
 
 
 // 7. As a user, I can earn badges for completing different exercise goals
+
+
 
 // 8. As a user, I can share workouts, badges, and other progress goals
 // across various social medias
