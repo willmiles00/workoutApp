@@ -145,20 +145,17 @@ function submitWorkout(){
   let formData = new FormData(newWorkoutForm);
   let selectedWorkoutType = workoutSelect.value;
   
-  //Creates a New Workout using the data gathered using submit
+  // Create a new workout object
   let newWorkout = {
-      id: completedWorkouts.length + 1,
-      date: formData.get('dateSelector'),
-      workout: selectedWorkoutType,
-      details:{}
+    date: formData.get('dateSelector'),
+    workout: selectedWorkoutType,
+    details: {}
   };
 
-
-  //grabs the mapping details defined at the top of the JS document
+  // Grab the mapping details defined at the top of the JS document
   const workoutType = workoutTypeMapping[selectedWorkoutType];
 
-
-  //if else statement checks if workout is a defined workout, or a generic one
+  // If else statement checks if workout is a defined workout, or a generic one
   if (workoutType && workoutType.fields.length > 0) {
     workoutType.properties.forEach(property => {
       newWorkout.details[property] = formData.get(property);
@@ -167,11 +164,26 @@ function submitWorkout(){
     // For "other" workout types, assuming it's a single details field
     newWorkout.details = formData.get('details');
   }
- 
-  //pushes to the completedWorkouts array
-  completedWorkouts.push(newWorkout);
-  addNewWorkoutPopout.close();
-  viewWorkouts(completedWorkouts)
+
+  // Send the new workout to the server
+  fetch('/api/workout', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newWorkout)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Handle the response from the server
+    console.log(data);
+    addNewWorkoutPopout.close();
+    viewWorkouts(data); // Call viewWorkouts here
+  })
+  .catch(error => {
+    // Handle the error
+    console.error('Error:', error);
+  });
 }
 
 
@@ -227,7 +239,7 @@ function viewWorkouts(completedWorkouts){
     timelineWhenNoWorkouts()
   }
 }
-viewWorkouts(completedWorkouts)
+// viewWorkouts(completedWorkouts)
 
 // 5. As a user, I can edit previously submitted workouts
 
