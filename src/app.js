@@ -249,11 +249,16 @@ let editBtnId;
 document.addEventListener('click', (event)=>{
   if (event.target.classList.contains('editBtn')) {
     editBtnId = event.target.dataset.editbtn;
-    const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId))
+    console.log(editBtnId)
+    //fetch the workout to be edited server side
+
+
+    // gotta make this work server side
+
 
     // creates a new date selector with the current date of the workout to be edited
     editDateSelector.innerHTML = ``
-    let date = `<input required type="date" id="dateSelector" name="dateSelector" value="${workoutToEdit.date}" min="2018-01-01" max=""/>`
+    let date = `<input required type="date" id="dateSelector" name="dateSelector" value="" min="2018-01-01" max=""/>`
     editDateSelector.insertAdjacentHTML('afterbegin', date)
 
     // creates a new workout selector with the current workout of the workout to be edited
@@ -297,7 +302,7 @@ editWorkoutPopout.addEventListener('submit', (event)=>{
 
 
 function editWorkout(editBtnId){
-  const workoutToEdit = completedWorkouts.find(workout => workout.id === parseInt(editBtnId));
+  console.log(editBtnId)
 
 }
 
