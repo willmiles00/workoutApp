@@ -16,7 +16,7 @@
  
   
 
-    <ul id="workoutTimeline" class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical h-screen">
+    <ul id="workoutTimeline" class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical min-h-screen">
      <!-- JS here -->
     </ul>
 
@@ -25,21 +25,24 @@
     <!-- New Workout Popup -->
     <dialog id="addNewWorkoutPopout" class="modal">
         <div class="modal-box">
-          <h3 class="font-bold text-lg">Track a Workout</h3>
-          <p class="py-4">Choose your type of workout</p>
+          <h3 class="font-bold text-center text-lg">Track a Workout</h3>
+  
           <div class="modal-action">
             <form id="newWorkoutForm" class="text-center justify-center items-center w-full" method="dialog">
-              <label for="start">Select workout date:</label>
+              <label class="m-1" for="start">Select workout date:</label>
 
-<input required type="date" id="dateSelector" name="dateSelector" value="" min="2018-01-01" max=""/>
+<input class="mb-6" required type="date" id="dateSelector" name="dateSelector" value="" min="2018-01-01" max=""/>
+
+<p class="py-4 font-bold text-center">Choose your type of workout</p>
               <select required name="workouts" id="workoutSelect" class="select select-bordered">
                 <option value="">--Please choose an option--</option>
                 <option value="weights">Weights</option>
                 <option value="running">Running</option>
                 <option value="pushups">Pushups</option>
+                <option value="swimming">Swimming</option>
               </select>
              
-              <button type="submit" class="btn btn-primary w-3/4">Submit</button>
+              <button type="submit" class="btn btn-primary w-3/4 m-3">Submit</button>
             </form>
           </div>
         </div>
@@ -57,12 +60,6 @@
 
         <div id="editDateSelector"></div>
         <div id="editWorkoutSelector"></div>
-        <!-- <select required name="workouts" id="workoutSelect" class="select select-bordered">
-          <option value="">--Please choose an option--</option>
-          <option value="weights">Weights</option>
-          <option value="running">Running</option>
-          <option value="pushups">Pushups</option>
-        </select> -->
        
         <button type="submit" class="btn btn-primary w-3/4">Submit</button>
       </form>
@@ -80,15 +77,15 @@
         <label for="start">Are you sure you would like to delete this workout?</label>
 
        
-        <button type="submit" class="btn btn-primary w-3/4">Yes</button>
-        <p class="btn btn-secondary w-1/2">No</p>
+        <button type="submit" class="btn btn-primary mb-2 w-3/4">Yes</button>
+        <p class="cancelAction btn btn-secondary w-1/2">No</p>
       </form>
     </div>
   </div>
 </dialog>
 <!-- End of Edit Workout Popup -->
       
-   <footer class="bg-slate-600 m-8">Will Miles yo</footer>
+   <footer class="bg-slate-600 rounded-2xl m-0 mt-5 p-10 text-center">Will Miles | DGM3760 | <a class="font-bold" target="_blank" href="https://www.linkedin.com/in/williammilesut/">Linkedin</a> </footer>
 <script type="module" src="./app.js" ></script>
 </body>
 </html>

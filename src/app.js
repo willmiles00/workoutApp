@@ -9,12 +9,9 @@ let editWorkoutPopout = document.querySelector('#editWorkoutPopout')
 let deleteWorkoutPopout = document.querySelector('#deleteWorkoutPopout')
 let editDateSelector = document.querySelector('#editDateSelector')
 let editWorkoutSelector = document.querySelector('#editWorkoutSelector')
+let cancelAction = document.querySelector('.cancelAction')
 
 
-
-// let completedWorkouts = [
-   
-// ];
 
 //server call to get completed workouts
 fetch('/api/workouts')
@@ -42,6 +39,15 @@ const workoutTypeMapping = {
       duration: 'Duration (in minutes)',
       distance: 'Distance (in miles)'
     }
+  },
+  swimming: {
+    fields: ['distance', 'time'], // Add the fields relevant to a swimming workout
+    properties: ['distance', 'time'],
+    displayNames: {
+      distance: 'Distance (in meters)',
+      time: 'Time (in minutes)'
+    }
+    // Add the properties relevant to a swimming workout
   },
   default: {
     fields: ['details'],
@@ -99,14 +105,29 @@ function generateFormElements(workoutType) {
       <div id="dynamicForm">
         <div id="runningForm">
           <label for="duration"><br>Duration (in minutes):</label>
-          <input class='input input-bordered w-1/2' required type="number" id="duration" name="duration" min="1" max="60" />
+          <input class='input input-bordered w-1/2' required type="number" id="duration" name="duration" min="0" max="9999" />
   
           <label for="distance"><br>Distance (in miles):</label>
-          <input class='input input-bordered w-1/2' required type="number" id="distance" name="distance" min="0" max="100" />
+          <input class='input input-bordered w-1/2' required type="number" id="distance" name="distance" min="0" max="9999" />
         </div>
         </div>
       `;
-    } else {
+    }
+    else if (workoutType === "swimming") {
+      // Generate cardio form elements
+      return `
+      <div id="dynamicForm">
+        <div id="swimmingForm">
+          <label for="distance"><br>Distance (in meters):</label>
+          <input class='input input-bordered w-1/2' required type="number" id="distance" name="distance" min="0" max="9999" />
+  
+          <label for="time"><br>Time (in minutes):</label>
+          <input class='input input-bordered w-1/2' required type="number" id="time" name="time" min="0" max="9999" />
+        </div>
+        </div>
+      `;
+    } 
+    else {
       // Default form elements for other workout types
       return `
       <div id="dynamicForm">
@@ -232,7 +253,7 @@ function viewWorkouts(completedWorkouts){
     workoutTimeline.insertAdjacentHTML("beforeend", createWorkoutElement(workout));
   });}
   else{
-    // timelineWhenNoWorkouts()
+   workoutTimeline.innerHTML = `<div class="text-2xl h-screen text-center">Click "Track A Workout" to get started! </div>`
   }
 }
 // viewWorkouts(completedWorkouts)
@@ -264,6 +285,7 @@ document.addEventListener('click', (event)=>{
     <option value="weights">Weights</option>
     <option value="running">Running</option>
     <option value="pushups">Pushups</option>
+    <option value="swimming">Swimming</option>
     </select>`
     editWorkoutSelector.insertAdjacentHTML('afterbegin', workout)
     editWorkoutSelector.addEventListener('change', (event) => {
@@ -307,10 +329,12 @@ function editWorkout(editBtnId){
     workout: selectedWorkoutType,
     details: {}
   };
-console.log(updatedWorkout)
+
   // Grab the mapping details defined at the top of the JS document
   const workoutType = workoutTypeMapping[selectedWorkoutType];
 
+
+  
   // If else statement checks if workout is a defined workout, or a generic one
   if (workoutType && workoutType.fields.length > 0) {
     workoutType.properties.forEach(property => {
@@ -362,6 +386,11 @@ deleteWorkoutPopout.addEventListener('submit', (event)=>{
   deleteWorkoutPopout.close();
 })
 
+cancelAction.addEventListener('click', (event)=>{
+  event.preventDefault()
+  deleteWorkoutPopout.close();
+}
+)
 
 function deleteWorkout(deleteBtnId){
   // Send the updated workout to the server

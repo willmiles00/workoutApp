@@ -16,24 +16,7 @@ app.use(express.static('dist'))
 
 
 let completedWorkouts = [
-  {
-    id: 1,
-    date: '2023-09-01',
-    workout: 'pushups',
-    details:'freud'
-},
-{
-  id: 2,
-  date: '2019-05-05',
-  workout: 'pushups',
-  details:'dfewq'
-},
-{
-  id: 3,
-  date: '2021-07-18',
-  workout: 'pushups',
-  details:'qfwed'
-},
+
 ]
 
 // gets all workouts from completedWorkouts array in server.js
